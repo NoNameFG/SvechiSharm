@@ -22,12 +22,17 @@ function ImageToolTip(props){
 
   return(
     <Card elevation={4} className={style.card}>
-      <CardMedia
-        className={style.card}
-        component='img'
-        src={image}
-        title="Product Image"
-      />
+      {
+        image ?
+          <CardMedia
+            className={style.cardMedia}
+            component='img'
+            src={image}
+            title="Product Image"
+          />
+          :
+          null
+      }
     </Card>
   )
 }

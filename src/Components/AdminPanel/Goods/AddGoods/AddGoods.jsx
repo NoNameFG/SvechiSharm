@@ -102,9 +102,10 @@ function AddGoods(props){
       await api.product.add({
         product: {
           ...productData,
+          categories: categoryList,
           in_stock: true
         },
-        images: imageList
+        images: imageList,
       })
       closePopup()
       snackBarChange(true)

@@ -23,6 +23,9 @@ export const useStyles = makeStyles({
     marginRight: 10,
     flex: '0 0 160px'
   },
+  cardMedia: {
+    width: '100%'
+  },
   removeButton: {
     position: 'absolute',
     top: 0,

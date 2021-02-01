@@ -9,10 +9,12 @@ import { useStyles } from '../../Style.js'
 function ImageTemplate(props){
   const styles = useStyles()
 
+
+
   return(
     <Card className={styles.card} elevation={4}>
       <CardMedia
-        className={styles.card}
+        className={styles.cardMedia}
         component='img'
         src={props.image}
         title="Image Preview"
