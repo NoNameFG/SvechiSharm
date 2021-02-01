@@ -1,0 +1,22 @@
+.login_page{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.button_container{
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+}
+
+.login_form{
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  width: 60%;
+  height: 60%;
+  margin-bottom: 35px;
+}
