@@ -15,7 +15,8 @@ function Good(props){
 
   const handleClick = e => {
     e.preventDefault()
-    history.push(`/admin_panel/goods/id=${props._id}`)
+    history.push(`/admin_panel/goods?id=${props._id}`)
+    props.setUpdateDialogStatus(true)
   }
 
   return(

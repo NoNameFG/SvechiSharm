@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useStyles } from '../Style.js'
 import Tooltip from '@material-ui/core/Tooltip'
-import ImageTemplate from './ImageTemplate/ImageTemplate.jsx'
+import ImageTemplate from '../AddGoods/ImageTemplate/ImageTemplate.jsx'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Dialog from '@material-ui/core/Dialog'
 import TextField from '@material-ui/core/TextField'
@@ -22,23 +22,8 @@ import Checkbox from '@material-ui/core/Checkbox'
 import '../Goods.css'
 import api from '../../../../Api/api.js'
 import shortid from 'shortid'
-import { getProductList } from '../../../../Actions/Requests/productList.js'
 
-const titleOfCategory = [
-  'Свечи из натуральной вощины',
-  'Свечи литые из натурального воска',
-  'Свечи Контейнерные',
-  'Свечи интерьерные',
-  'Свечи свадебные',
-  'Свечи подарочные',
-  'Наборы для изготовления свечей своими руками',
-  'Свечи в торт',
-  'Свечи-цифры',
-  'Свечи с добавлением натуральных эфирных масел',
-  'Арома-свечи'
-]
-
-function AddGoods(props){
+function UpdateGood(props){
   const [imageList, setImageList] = useState([])
   const [productData, setProductData] = useState({})
   const [addCategory, setAddCategory] = useState(null)
@@ -48,9 +33,41 @@ function AddGoods(props){
     success: false
   })
 
-  const dispatch = useDispatch()
+  const titleOfCategory = [
+    'Свечи из натуральной вощины',
+    'Свечи литые из натурального воска',
+    'Свечи Контейнерные',
+    'Свечи интерьерные',
+    'Свечи свадебные',
+    'Свечи подарочные',
+    'Наборы для изготовления свечей своими руками',
+    'Свечи в торт',
+    'Свечи-цифры',
+    'Свечи с добавлением натуральных эфирных масел',
+    'Арома-свечи'
+  ]
 
   const styles = useStyles()
+
+  useEffect(()=>{
+    if(props.updateDialogStatus === true){
+      let outContext = setTimeout(async () => {
+        console.log(window.location.search)
+        const url = new URLSearchParams(window.location.search)
+        const _id = url.get('id')
+        try {
+          let data = await api.product.get_by_id({_id})
+          console.log(data)
+        } catch (e) {
+          console.log(e)
+        }
+      })
+
+      return () => {
+        clearTimeout(outContext)
+      }
+    }
+  }, [props.updateDialogStatus])
 
   const imageUpload = e => {
     const file = e.target.files[0]
@@ -80,7 +97,7 @@ function AddGoods(props){
 
   const closePopup = () => {
     clearState()
-    props.setAddDialogStatus(false)
+    props.setUpdateDialogStatus(false)
   }
 
   const handleChange = e => {
@@ -111,7 +128,7 @@ function AddGoods(props){
       })
       closePopup()
       snackBarChange(true)
-      dispatch(getProductList())
+      props.getUpdateProductList()
     } catch (e) {
       snackBarChange(undefined, true)
     }
@@ -166,7 +183,7 @@ function AddGoods(props){
         autoHideDuration={3000}
       >
         <Alert onClose={() => snackBarChange()} severity="success" elevation={6} variant="filled">
-          Товар был успешно добавлен.
+          Товар был успешно обновлён.
         </Alert>
       </Snackbar>
 
@@ -180,13 +197,13 @@ function AddGoods(props){
         autoHideDuration={3000}
       >
         <Alert onClose={() => snackBarChange()} severity="error" elevation={6} variant="filled">
-          Ошибка добавления товара.
+          Ошибка обновления товара.
         </Alert>
       </Snackbar>
 
-      <Dialog aria-labelledby="dialog-title" onClose={closePopup} open={props.addDialogStatus}>
+      <Dialog aria-labelledby="dialog-title" onClose={closePopup} open={props.updateDialogStatus}>
         <div className="add_product-popup">
-          <DialogTitle id="dialog-title">Добавление товара</DialogTitle>
+          <DialogTitle id="dialog-title">Обновление товара</DialogTitle>
 
           <div className="add_product-wrapp">
             <div className="add_product-left_panel">
@@ -258,4 +275,4 @@ function AddGoods(props){
   )
 }
 
-export default AddGoods
+export default UpdateGood

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Fab from '@material-ui/core/Fab'
 import Tooltip from '@material-ui/core/Tooltip'
 import AddIcon from '@material-ui/icons/Add'
@@ -7,27 +8,25 @@ import List from '@material-ui/core/List'
 import { useStyles } from './Style.js'
 import './Goods.css'
 import Good from './Good/Good.jsx'
-import api from '../../../Api/api.js'
+import UpdateGood from './UpdateProduct/UpdateGood.jsx'
 import shortid from 'shortid'
-
+//actions
+import { getProductList } from '../../../Actions/Requests/productList.js'
 
 
 function Goods() {
   const [addDialogStatus, setAddDialogStatus] = useState(false)
+  const [updateDialogStatus, setUpdateDialogStatus] = useState(false)
   const [productSort, setProductSort] = useState({})
-  const [productList, setProductList] = useState([])
+
+  const state = useSelector(state => state.productList)
+  const dispatch = useDispatch()
 
   const styles = useStyles()
 
-
   useEffect(() => {
     let outContext = setTimeout(async () => {
-      try {
-        let data = await api.product.get_list({})
-        setProductList(data.data)
-      } catch (e) {
-        console.log(e)
-      }
+        dispatch(getProductList())
     })
 
     return () => {
@@ -35,8 +34,8 @@ function Goods() {
     }
   }, [])
 
-  const showGoods = productList.map(el => (
-    <Good {...el} key={shortid.generate()}/>
+  const showGoods = state.map(el => (
+    <Good {...el} key={shortid.generate()} setUpdateDialogStatus={setUpdateDialogStatus}/>
   ))
 
   return(
@@ -46,6 +45,8 @@ function Goods() {
       </List>
 
       <AddGoods setAddDialogStatus={setAddDialogStatus} addDialogStatus={addDialogStatus}/>
+      <UpdateGood setUpdateDialogStatus={setUpdateDialogStatus} updateDialogStatus={updateDialogStatus}/>
+
 
       <Tooltip title="Добавить товар" aria-label="add">
         <Fab color="primary" className={styles.fab} onClick={() => setAddDialogStatus(true)}>
