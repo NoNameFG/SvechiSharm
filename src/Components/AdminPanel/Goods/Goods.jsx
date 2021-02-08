@@ -25,13 +25,7 @@ function Goods() {
   const styles = useStyles()
 
   useEffect(() => {
-    let outContext = setTimeout(async () => {
-        dispatch(getProductList())
-    })
-
-    return () => {
-      clearTimeout(outContext)
-    }
+    dispatch(getProductList())
   }, [])
 
   const showGoods = state.map(el => (
